@@ -11,6 +11,12 @@ public class Account {
         this.balance = balance;
 
     }
+    public Account() {
+        this.accountId = accountId;
+        this.userId = userId;
+        this.balance = balance;
+
+    }
 
     public int getAccountId() {
         return accountId;

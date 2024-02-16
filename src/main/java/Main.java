@@ -1,3 +1,4 @@
+import Model.Account;
 import Model.User;
 import Service.UserService;
 
@@ -9,6 +10,7 @@ import java.util.*;
 
 public class Main {
     public static User sessionUser = null;
+    public static Account sessionAccount = new Account();
     private static List<User> userList = new ArrayList<>();
     public static UserService userService = new UserService(userList);
     public static List<String> registeredUsers = new ArrayList<>();
@@ -33,32 +35,72 @@ public class Main {
 //            System.out.println("Error connecting to the database");
 //            e.printStackTrace();
 //        }
-        System.out.print("Welcome to Maks Bank!\n" + "\n" +
-                "Please select one of the following options:\n" + "\n" +
-                "To register Select 1\n" +
-                "To login Select 2\n" +
-                "To exit Select 3\n");
-        Scanner scanner = new Scanner(System.in);
-         int input = scanner.nextInt();
-        scanner.nextLine();
+        int userInput = 1;
+        while (userInput != 2) {
+            System.out.print("Welcome to Maks Bank!\n" + "\n" +
+                    "Please select one of the following options:\n" + "\n" +
+                    "To register Select 1\n" +
+                    "To login Select 2\n" +
+                    "To exit Select 3\n");
+            Scanner scanner = new Scanner(System.in);
+            int input = scanner.nextInt();
+            scanner.nextLine();
 
-        switch (input) {
-            case 1:
-                register(scanner);
-                System.out.println("Registration completed successfully.");
+            switch (input) {
+                case 1:
+                    register(scanner);
+                    System.out.println("Registration completed successfully.\n");
 
-                break;
-            case 2:
-                login(scanner);
-                break;
+                    break;
+                case 2:
+                    login(scanner);
+                    userInput = 2;
+                    break;
 
-            case 3:
-                System.exit(0);
-                break;
+                case 3:
+                    System.exit(0);
+                    break;
+            }
+
         }
+        int menuOption = 0;
+        while (menuOption != 4) {
+            System.out.print("What would you like to do today?\n" +
+                    "To check Balance Select 1:\n" + "\n" +
+                    "To add funds Select 2\n" +
+                    "To withdraw funds Select 3\n" +
+                    "To return to main menu Select 4\n");
+            Scanner loginScanner = new Scanner(System.in);
+            int input = loginScanner.nextInt();
+            loginScanner.nextLine();
 
+            switch (input) {
+                case 1:
+                    double balance = sessionAccount.getBalance();
+                    System.out.println("Your balance is " + balance + "\n");
+                    break;
+                case 2:
+                    Scanner fundsScanner = new Scanner(System.in);
+                    System.out.println("Please enter the amount of funds you would like to add");
+                    double funds = fundsScanner.nextInt();
+                    sessionAccount.setBalance(sessionAccount.getBalance() + funds);
+                    System.out.println("You added " + funds + ", your new total balance is " + sessionAccount.getBalance());
+                    break;
+
+                case 3:
+                    Scanner withdrawScanner = new Scanner(System.in);
+                    System.out.println("Please enter the amount of funds you would like to withdraw");
+                    double withdraw = withdrawScanner.nextInt();
+                    sessionAccount.setBalance(sessionAccount.getBalance() - withdraw);
+                    System.out.println("You added -" + withdraw + ", your new total balance is " + sessionAccount.getBalance());
+                    break;
+                case 4:
+                    menuOption = 4;
+                    System.out.println("Have a wonderful day!");
+            }
+        }
+        System.exit(0);
     }
-
     private static void register(Scanner scanner) {
         System.out.println("Please enter email");
         String email = scanner.nextLine();
