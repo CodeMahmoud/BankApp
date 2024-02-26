@@ -1,31 +1,14 @@
-package Model;
+package Utili.DTO;
 
-public class User {
-    private int userId = 1;
+public class LoginCreds {
     private String email;
     private String password;
 
-
-    public User(String email, String password, String customerName) {
-
+    public LoginCreds(String email, String password) {
         this.email = email;
         this.password = password;
-
     }
-
-    public User() {
-        this.userId = userId;
-        this.email = email;
-        this.password = password;
-
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public LoginCreds() {
     }
 
     public String getEmail() {
@@ -43,6 +26,4 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-
 }
