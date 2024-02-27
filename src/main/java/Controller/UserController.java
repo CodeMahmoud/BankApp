@@ -58,5 +58,9 @@ public class UserController {
                 context.json(user);
             }
         }
+
+    }
+    public User getSessionUser() {
+        return sessionUser;
     }
 }

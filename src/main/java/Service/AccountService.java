@@ -1,6 +1,8 @@
 package Service;
 
 import DAO.AccountDAO;
+import DAO.UserDAO;
+import Model.Account;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,14 +10,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AccountService {
-    private  Connection conn;
+    private Connection conn;
+    private AccountDAO accountDAO;
 
     public AccountService(Connection conn) {
         this.conn = conn;
+        this.accountDAO = new AccountDAO();
+    }
+    public AccountService(AccountDAO accountDAO) {
+        this.accountDAO = accountDAO;
     }
 
     public double getBalance(int userId) {
-        String sql = "SELECT balance FROM accounts WHERE user_id = ?";
+        String sql = "SELECT balance FROM account WHERE user_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, userId);
             ResultSet rs = pstmt.executeQuery();
@@ -28,12 +35,12 @@ public class AccountService {
         return 0.0;
     }
 
-    public void deposit(int userId, double amount) {
+    public boolean deposit(int userId, double amount) {
         if (amount <= 0) {
             System.out.println("Deposit amount must be positive.");
-            return;
+
         }
-        String sql = "UPDATE accounts SET balance = balance + ? WHERE user_id = ?";
+        String sql = "UPDATE account SET balance = balance + ? WHERE user_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setDouble(1, amount);
             pstmt.setInt(2, userId);
@@ -41,12 +48,15 @@ public class AccountService {
             if (affectedRows > 0) {
                 double newBalance = getBalance(userId);
                 System.out.println("Deposit successful. Current balance: " + newBalance);
+                return true;
             } else {
                 System.out.println("Deposit failed.");
+
             }
         } catch (SQLException e) {
             System.out.println("Error during deposit: " + e.getMessage());
         }
+        return false;
     }
 
     public void withdraw(int userId, double amount) {
@@ -59,7 +69,7 @@ public class AccountService {
             System.out.println("Insufficient funds.");
             return;
         }
-        String sql = "UPDATE accounts SET balance = balance - ? WHERE user_id = ?";
+        String sql = "UPDATE account SET balance = balance - ? WHERE user_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setDouble(1, amount);
             pstmt.setInt(2, userId);
@@ -72,6 +82,14 @@ public class AccountService {
             }
         } catch (SQLException e) {
             System.out.println("Error during withdrawal: " + e.getMessage());
+        }
+    }
+    public Account createAccount(Account account) {
+        try {
+            return accountDAO.createAccount(account, conn);
+        } catch (SQLException ex) {
+            System.out.println("Error creating account: " + ex.getMessage());
+            return null;
         }
     }
 }

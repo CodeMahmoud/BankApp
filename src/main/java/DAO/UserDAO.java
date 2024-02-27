@@ -7,7 +7,6 @@ import java.sql.*;
 public class UserDAO {
 
     public User createUser(User registerUser) {
-//        sql here
 
         try (Connection conn = ConnectionFactory.getConnectionFactory().getConnection()) {
 
