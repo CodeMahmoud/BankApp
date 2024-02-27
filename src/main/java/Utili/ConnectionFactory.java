@@ -28,7 +28,7 @@ public class ConnectionFactory {
         try {
             String url = "jdbc:mysql://ba-database.crm486eaux5t.us-east-1.rds.amazonaws.com:3306/BankApp";
             String user = "admin";
-            String pass = "mahmoud1122!";
+            String pass = "";
             return DriverManager.getConnection(url, user, pass);
         } catch (SQLException e) {
             throw new RuntimeException("Error connecting to the database", e);
